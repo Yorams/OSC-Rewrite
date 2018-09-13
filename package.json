@@ -1,0 +1,15 @@
+{
+  "name": "oscrewrite",
+  "version": "0.0.1",
+  "productName": "OSC Rewrite",
+  "description": "Rewrites OSC command from a Hog to trigger Qlab",
+  "main": "server.js",
+  "author": "Yoram Scheer",
+  "license": "MIT",
+  "dependencies": {
+    "ip": "^1.1.5",
+    "jquery": "^3.3.1",
+    "node-osc": "^2.1.0",
+    "terminal-kit": "^1.26.2"
+  }
+}

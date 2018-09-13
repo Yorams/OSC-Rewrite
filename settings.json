@@ -1,0 +1,6 @@
+{
+	"incomingHogPort" : 7002,
+	"outgoingQlabPort" : 53000,
+	"qlabIp" : "localhost",
+	"listenToHogList" : 2
+}
