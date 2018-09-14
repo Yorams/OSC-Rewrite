@@ -17,6 +17,7 @@ term.color(4);
 term.bold("OSC Rewrite\n");
 term.defaultColor();
 term("Local IP: "+ip.address()+", Incoming port: "+settings.incomingHogPort+", Outgoing port: "+ settings.outgoingQlabPort +"\n");
+term("Relays OSC data to: "+settings.touchOscHost+" at port: "+settings.touchOscPort+"\n")
 term("Listning to list nr: "+ settings.listenToHogList);
 
 // Init rest of gui
@@ -39,18 +40,22 @@ function startServer(properties){
             updateCue(currentCue.number);
 
             // Send osc to qlab
-            func.sendOSCMsg('/cue/'+currentCue.number+'/start');
+            func.sendOSCMsg(settings.qlabHost, settings.outgoingQlabPort, '/cue/'+currentCue.number+'/start');
         },
         onPing: function(hog){
             updatePing(hog.time)
             //console.log("Ping");
+        },
+        onRawPacket: function(data){
+            // Relay unfiltered data to touchOsc device
+            func.sendOSCMsg(settings.touchOscHost, settings.touchOscPort, data);
         }
     });
 }
 
 function updateStatus(msg, colorNr){
     //Red: 1, Green: 2, Yellow: 3, Blue: 4
-    term.moveTo( 1 , 4 ).eraseLine();
+    term.moveTo( 1 , 6 ).eraseLine();
     term("Status: ");
     term.color(colorNr);
     term(msg)
@@ -58,15 +63,15 @@ function updateStatus(msg, colorNr){
 }
 
 function updateCue(msg){
-    term.moveTo( 1 , 7 ).eraseLine();
+    term.moveTo( 1 , 9 ).eraseLine();
     term("Latest Cue: ");
     term(msg);
 }
 
 function updatePing(msg){
-    term.moveTo( 1 , 5 , "Time from Hog: ");
+    term.moveTo( 1 , 7 , "Time from Hog: ");
     term(msg);
-    term.moveTo( 1 , 6 );
+    term.moveTo( 1 , 8 );
     term.gray("If the time is not changing the connection is broken.");
 }
 

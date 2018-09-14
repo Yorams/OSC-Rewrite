@@ -6,13 +6,13 @@ const url = require('url')
 
 var exports = module.exports = {};
 
-exports.handleOSCMsg = function(oscServer, recordedListNr, {onCueIncoming, onPing}={}){
+exports.handleOSCMsg = function(oscServer, recordedListNr, {onCueIncoming, onPing, onRawPacket}={}){
     // Handle OSC Message
     oscServer.on("message", function (msg, rinfo) {
 
         // Extract payload from msg
         msgPayload = msg[2][2]
-        
+
         // Check is go button is pushed
         if(msgPayload[0].includes("/hog/playback/go/0")){
             var recvCueArray = []
@@ -38,11 +38,14 @@ exports.handleOSCMsg = function(oscServer, recordedListNr, {onCueIncoming, onPin
             }
             onPing(resultData);
         }
+
+        // Unfiltered data is passed to this function.
+        onRawPacket(msgPayload);
     });
 }
 
-exports.sendOSCMsg = function(oscMsg){
-    var client = new osc.Client('localhost', 53000);
+exports.sendOSCMsg = function(host, port, oscMsg){
+    var client = new osc.Client(host, port);
 
     client.send(oscMsg, function (err) {
         if (err) {

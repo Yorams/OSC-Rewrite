@@ -20,6 +20,10 @@ Rewrites OSC Cue's from Hog to Qlab
 
    - **listenToHogList:** List to listen on of the Hog.
 
+   - **touchOscHost:** All OSC data is relayed to this ip, for use with touchOSC Remote
+
+   - **touchOscPort:** And port number for above IP.
+
 2. Run server
 
    ```start.sh```
