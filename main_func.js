@@ -1,7 +1,8 @@
 var osc = require('node-osc');
 var fs = require('fs');
 const path = require('path');
-const url = require('url')
+const url = require('url');
+var term = require( 'terminal-kit' ).terminal;
 
 
 var exports = module.exports = {};
@@ -38,9 +39,11 @@ exports.handleOSCMsg = function(oscServer, recordedListNr, {onCueIncoming, onPin
             }
             onPing(resultData);
         }
-
+        
         // Unfiltered data is passed to this function.
         onRawPacket(msgPayload);
+        
+
     });
 }
 
@@ -49,7 +52,19 @@ exports.sendOSCMsg = function(host, port, oscMsg){
 
     client.send(oscMsg, function (err) {
         if (err) {
-            console.error(new Error(err));
+
+            // Print error in term line with color
+            term.moveTo( 1 , 5 ).eraseLine();
+            term("Info: ");
+            term.color(3);
+            term(err)
+
+            err = err.toString();
+            if(err.indexOf("EHOSTDOWN") > -1){
+              term(" (TouchOSC device is probably offline. Don't panic, nothing on the hand.)")
+            }
+
+            term.defaultColor()
         }
         client.kill();
     });
@@ -57,8 +72,6 @@ exports.sendOSCMsg = function(host, port, oscMsg){
 
 exports.remTrailingZero = function(value) {
   value = value.toString()
-
-  // console.log('Starting with:', value, value.indexOf('.'))
 
   // if not containing a dot, we do not need to do anything
   if (value.indexOf('.') === -1) {
@@ -69,8 +82,6 @@ exports.remTrailingZero = function(value) {
 
   // as long as the last character is a 0, remove it
   do {
-    // console.log('Checking:', value[cutFrom], cutFrom)
-
     if (value[cutFrom] === '0') {
       cutFrom--
     }
