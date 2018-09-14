@@ -24,11 +24,11 @@ exports.handleOSCMsg = function(oscServer, recordedListNr, {onCueIncoming, onPin
 
             // Filter of gekozen cuelijst
             if(recvCueArray["list"] == recordedListNr){
-              
-                //console.log(timestampFrom + " Cue " + String(recvCueArray["cue"]) + ": " + currentCue.name + " (" + currentCue.comment + ")");
-
+                // Round cue number to 3 decimals. Some hog cue's shows 32.6 but 32.555598 is send. 
+                var currCueNumber = Number.parseFloat(recvCueArray["cue"]).toFixed(3)
+                currCueNumber = exports.remTrailingZero(currCueNumber);
                 resultData = {
-                    number: recvCueArray["cue"]
+                    number: currCueNumber
                 }
                 onCueIncoming(resultData);
             }
@@ -50,5 +50,35 @@ exports.sendOSCMsg = function(oscMsg){
         }
         client.kill();
     });
+}
+
+exports.remTrailingZero = function(value) {
+  value = value.toString()
+
+  // console.log('Starting with:', value, value.indexOf('.'))
+
+  // if not containing a dot, we do not need to do anything
+  if (value.indexOf('.') === -1) {
+    return value
+  }
+
+  var cutFrom = value.length - 1
+
+  // as long as the last character is a 0, remove it
+  do {
+    // console.log('Checking:', value[cutFrom], cutFrom)
+
+    if (value[cutFrom] === '0') {
+      cutFrom--
+    }
+
+  } while (value[cutFrom] === '0')
+
+  // final check to make sure we end correctly
+  if (value[cutFrom] === '.') {
+    cutFrom--
+  }
+
+  return value.substr(0, cutFrom + 1)
 }
 

@@ -6,7 +6,7 @@ var fs = require("fs");
 var term = require( 'terminal-kit' ).terminal;
 
 // Get settings from file
-var contents = fs.readFileSync("settings.json");
+var contents = fs.readFileSync(__dirname+"/settings.json");
 var settings = JSON.parse(contents);
 
 // Clear the console
