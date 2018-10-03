@@ -61,7 +61,8 @@ exports.sendOSCMsg = function(host, port, oscMsg){
 
             err = err.toString();
             if(err.indexOf("EHOSTDOWN") > -1){
-              term(" (TouchOSC device is probably offline. Don't panic, nothing on the hand.)")
+              // No error is printed, because its messes up the gui
+              //term(" (TouchOSC device is probably offline. Don't panic, nothing on the hand.)")
             }
 
             term.defaultColor()

@@ -2,7 +2,9 @@
 	"incomingHogPort" : 7002,
 	"outgoingQlabPort" : 53000,
 	"qlabHost" : "localhost",
-	"listenToHogList" : 1,
-	"touchOscHost" : "10.0.0.201",
-	"touchOscPort" : 7002
+	"listenToHogList" : 2,
+	"touchOscHostA" : "10.0.0.201",
+	"touchOscPortA" : 7002,
+	"touchOscHostB" : "10.0.0.202",
+	"touchOscPortB" : 7002
 }
