@@ -9,6 +9,8 @@ var term = require( 'terminal-kit' ).terminal;
 var contents = fs.readFileSync(__dirname+"/settings.json");
 var settings = JSON.parse(contents);
 
+var currentHogTime;
+
 // Clear the console
 term.clear();
 
@@ -17,7 +19,7 @@ term.color(4);
 term.bold("OSC Rewrite\n");
 term.defaultColor();
 term("Local IP: "+ip.address()+", Incoming port: "+settings.incomingHogPort+", Outgoing port: "+ settings.outgoingQlabPort +"\n");
-term("Relays OSC data to: "+settings.touchOscHostA+" @ "+settings.touchOscPortA+" and "+settings.touchOscHostB+" @: "+settings.touchOscPortB+"\n")
+term("Relays OSC data to: "+settings.touchOscHostA+" @ "+settings.touchOscPortA+" and "+settings.touchOscHostB+" @ "+settings.touchOscPortB+"\n")
 term("Listning to list nr: "+ settings.listenToHogList);
 
 // Init rest of gui
@@ -44,6 +46,7 @@ function startServer(properties){
         },
         onPing: function(hog){
             updatePing(hog.time)
+            currentHogTime = hog.time;
             //console.log("Ping");
         },
         onRawPacket: function(data){
@@ -67,6 +70,8 @@ function updateCue(msg){
     term.moveTo( 1 , 10 ).eraseLine();
     term("Latest Cue: ");
     term(msg);
+    term(" @ ");
+    term(currentHogTime);
 }
 
 function updatePing(msg){
